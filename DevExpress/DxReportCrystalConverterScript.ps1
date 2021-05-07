@@ -1,4 +1,15 @@
 <#
+This is a script to automate batch conversion of a large number of Crystal reports to DevExpress Reports 
+using the DevExpress command line utility referenced here: https://github.com/DevExpress/Reporting.Import/ 
+
+This script will recurse through a file structure where hopefully all of your Crystal files are stored and 
+then will rebuild that same file structure with the converted files in a target folder of your choosing. 
+Each converted report will also be accompanied by a log file in the same folder as the converted reports 
+with the details of each and the script also provides a log file with a high level log file that you specify 
+the location of. 
+#>
+
+<#
 You need to set four variables in the script before running it:
 
 $CrystalReportSource

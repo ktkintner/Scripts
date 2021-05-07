@@ -1,9 +1,9 @@
 ﻿<#
-Script will GPUpdate /force a single computer or list of computers, script prompts for computer or you can
-enter multiple computers by separating multiple computer names with a comma ',' between each
+Script will GPUpdate /force an OU, script prompts for the OU 
 #>
 
-$cn = Read-Host -Prompt 'Enter the computers you would like to update separated by commas: '
+$ouToSearch = Read-Host -Prompt 'Enter the OU you would like to update: '
+$cn = Get-ADComputer -filter * -SearchBase $ouToSearch
 $cred = Get-Credential
 $session = New-PSSession -ComputerName $cn.name -cred $cred
 Invoke-Command -Session $session -ScriptBlock {gpupdate /force}

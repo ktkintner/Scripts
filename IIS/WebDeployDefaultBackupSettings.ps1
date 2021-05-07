@@ -1,3 +1,8 @@
+<#
+This script is a basic script that allows you to set the default settings for backing up IIS sites automatically when using Web Deploy to 
+make changes to the site. It could be added to a MDT or SCCM deployment sequence to further simplify. 
+#>
+
 # Full documentation for Web Deploy backup: https://docs.microsoft.com/en-us/iis/publish/using-web-deploy/web-deploy-automatic-backups
 
 # Set location as where Web Deploy backup script is located

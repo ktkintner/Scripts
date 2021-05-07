@@ -1,4 +1,8 @@
-﻿$cn = Get-ADComputer -filter *
+﻿<#
+Script will GPUpdate /force all computers in the domain
+#>
+
+$cn = Get-ADComputer -filter *
 $cred = Get-Credential
 $session = New-PSSession -ComputerName $cn.name -cred $cred
 Invoke-Command -Session $session -ScriptBlock {gpupdate /force}
