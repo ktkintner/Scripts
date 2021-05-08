@@ -9,10 +9,10 @@ downtime, since the VM must be offline. To solve tihs problem, I wrote this scri
 
 
 #These are the variables that need to be defined for your environment and for each run
-$vmHost = "vmhost"
-$vmName = "vmname"
+$vmHost = "yourVMHost"
+$vmName = "yourVM"
 $controllerLocation = 0
-$mergeLog = c:\temp\mergeVHD.txt
+$mergeLog = "c:\temp\logfile"
 
 #defining a loop counter for the while statement
 $loopCount = 0
@@ -40,41 +40,38 @@ Add-Content $mergeLog ""
 Add-Content $mergeLog ""
 Add-Content $mergeLog "---------------------------------------------------------------------------------------"
 
-#updating current VHD and parent because where the full list of VHDs was retrieved overwrote the variable
-$path = (Get-VMHardDiskDrive -ComputerName $vmHost -VMName $vmName -ControllerLocation $controllerLocation).path
-$parentPath = (Get-VHD -Path $path).ParentPath
 
-While (( $parentPath ) -ne '') {
-    Write-Host "Merging VHDs"
-    Write-Host "Attempting to"
-    Write-Host "Merge :" $path 
-    Write-Host "Into :" $parentPath
 
-    Merge-VHD -Path $path -Force
-
-    #Log file entry for individual merge
-    Add-Content $mergeLog "Merged: `t "  -NoNewline
-    Add-Content $mergeLog -Value $path
-    Add-Content $mergeLog "Into:   `t " -NoNewline
-    Add-Content $mergeLog "At:     `t " -NoNewline
-    Add-Content $mergeLog -Value (Get-Date) -PassThru -NoNewline
-    Add-Content $mergeLog ""
-    Add-Content $mergeLog ""
-
-    #Pausing breifly out of an abundance of coution
-    Write-Host "Pausing for 60 seconds..."
-    Start-Sleep (60)
-    Write-Host "Resuming..."
+foreach ($item in $vhdList) {
     
-    #Updating variables for the next current VHD and parent
-    $path = (Get-VMHardDiskDrive -ComputerName $vmHost -VMName $vmName -ControllerLocation $controllerLocation).path
+	$path = $item
     $parentPath = (Get-VHD -Path $path).ParentPath
-    
-    #Updating loop count and writing message to terminal
-    $loopCount++
-    Write-Host "VHDs merged: " $loopCount
-}
+	
+	If ( $parentPath -ne '' ) {
+        Write-Host "Merging VHDs"
+        Write-Host "Attempting to"
+        Write-Host "Merge :" $path 
+        Write-Host "Into :" $parentPath
 
+        Merge-VHD -Path $path -Force
+
+        #Log file entry for individual merge
+        Add-Content $mergeLog "Merged: `t "  -NoNewline
+        Add-Content $mergeLog -Value $path
+        Add-Content $mergeLog "Into:   `t " -NoNewline
+        Add-Content $mergeLog -Value $parentPath
+        Add-Content $mergeLog "At:     `t " -NoNewline
+        Add-Content $mergeLog -Value (Get-Date) -PassThru -NoNewline
+        Add-Content $mergeLog ""
+        Add-Content $mergeLog ""
+        
+        #Updating loop count and writing message to terminal
+        $loopCount++
+        Write-Host "VHDs merged: " $loopCount
+        Write-Host ""
+        Write-Host ""
+    }
+}
 If ( $loopCount -gt 0 ) {
     Write-Host "Merge complete! Total files merged: " $loopCount
 }
