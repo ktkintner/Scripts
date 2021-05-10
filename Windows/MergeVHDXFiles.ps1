@@ -12,7 +12,7 @@ downtime, since the VM must be offline. To solve tihs problem, I wrote this scri
 $vmHost = "yourVMHost"
 $vmName = "yourVM"
 $controllerLocation = 0
-$mergeLog = "c:\temp\logfile"
+$mergeLog = "c:\temp\logfile.txt"
 
 #defining a loop counter for the while statement
 $loopCount = 0
