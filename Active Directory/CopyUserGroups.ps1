@@ -12,7 +12,7 @@ $groups = (Get-ADUser $copyUser -Properties MemberOf).MemberOf | get-adgroup
 $groups = ($groups).samaccountname
 
 foreach ( $item in $groups ) {
-    add-adgroupmember -identity $item -members $copyUser
+    add-adgroupmember -identity $item -members $newUser
 }
 
 #Clear stored variables
